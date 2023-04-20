@@ -1,0 +1,94 @@
+# Namespace where the Scylla Cluster will be created
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: scylla
+
+---
+
+# Scylla Cluster
+apiVersion: scylla.scylladb.com/v1
+kind: ScyllaCluster
+metadata:
+  name: scylla-cluster
+  namespace: scylla
+spec:
+  version: 5.0.5
+  agentVersion: 3.0.1
+  cpuset: true
+  network:
+    hostNetworking: true
+  sysctls:
+  - "fs.aio-max-nr=2097152"
+  datacenter:
+    name: us-east-1
+    racks:
+    - name: a
+      members: 2
+      storage:
+        storageClassName: local-raid-disks
+        capacity: 1800G
+      resources:
+        limits:
+          cpu: 3
+          memory: 24G
+      placement:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: topology.kubernetes.io/zone
+                  operator: In
+                  values:
+                    - us-east-1a
+        tolerations:
+          - key: role
+            operator: Equal
+            value: scylla-clusters
+            effect: NoSchedule
+    - name: b
+      members: 2
+      storage:
+        storageClassName: local-raid-disks
+        capacity: 1800G
+      resources:
+        limits:
+          cpu: 3
+          memory: 24G
+      placement:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                - us-east-1b
+        tolerations:
+        - key: role
+          operator: Equal
+          value: scylla-clusters
+          effect: NoSchedule
+    - name: c
+      members: 2
+      storage:
+        storageClassName: local-raid-disks
+        capacity: 1800G
+      resources:
+        limits:
+          cpu: 3
+          memory: 24G
+      placement:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                - us-east-1c
+        tolerations:
+        - key: role
+          operator: Equal
+          value: scylla-clusters
+          effect: NoSchedule
