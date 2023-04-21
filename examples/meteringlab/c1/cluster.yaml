@@ -23,33 +23,6 @@ data:
 ---
 
 apiVersion: scylla.scylladb.com/v1alpha1
-kind: NodeConfig
-metadata:
-  name: cluster
-spec:
-  localDiskSetup:
-    filesystems:
-    - device: nvmes
-      type: xfs
-    mounts:
-    - device: nvmes
-      mountPoint: /mnt/persistent-volumes
-      unsupportedOptions:
-      - prjquota
-    raids:
-    - name: nvmes
-      type: RAID0
-      RAID0:
-        devices:
-          modelRegex: Amazon EC2 NVMe Instance Storage
-          nameRegex: ^/dev/nvme\d+n\d+$
-  placement:
-    nodeSelector:
-      scylla.scylladb.com/node-type: scylla
-
----
-
-apiVersion: scylla.scylladb.com/v1alpha1
 kind: ScyllaDBMonitoring
 metadata:
   name: example
@@ -59,7 +32,7 @@ spec:
     matchLabels:
       app.kubernetes.io/name: scylla
       scylla-operator.scylladb.com/scylla-service-type: identity
-      scylla/cluster: replace-with-your-scyllacluster-name
+      scylla/cluster: scylla-cluster
   components:
     prometheus:
       storage:
@@ -74,7 +47,7 @@ spec:
           ingress:
             ingressClassName: haproxy
             dnsDomains:
-            - test-grafana.test.svc.cluster.local
+            - grafana.meteringlab.svc.cluster.local
             annotations:
               haproxy-ingress.github.io/ssl-passthrough: "true"
 
@@ -92,6 +65,14 @@ spec:
   cpuset: true
   sysctls:
   - "fs.aio-max-nr=90000000"
+  exposeOptions:
+    cql:
+      ingress:
+        ingressClassName: haproxy
+        dnsDomains:
+        - meteringlab.svc.cluster.local
+        annotations:
+          haproxy-ingress.github.io/ssl-passthrough: "true"
   datacenter:
     name: us-east-1
     racks:
