@@ -11,8 +11,3 @@ function wait-for-object-creation {
 }
 
 eksctl create cluster -f ./eks-cluster.yaml 
-
-# Configure node disks and network
-kubectl apply -f node-setup-daemonset.yaml
-wait-for-object-creation default daemonset.apps/node-setup
-kubectl rollout status --timeout=5m daemonset.apps/node-setup

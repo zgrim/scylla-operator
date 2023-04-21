@@ -12,7 +12,7 @@ availabilityZones:
 
 nodeGroups:
 - name: scylla-pool
-  instanceType: i3.xlarge
+  instanceType: i4i.xlarge
   desiredCapacity: 3
   labels:
     pool: "scylla-pool"
@@ -20,6 +20,8 @@ nodeGroups:
     role: "scylla-clusters:NoSchedule"
   ssh:
     allow: true
+  tags:
+    keep: alive
   kubeletExtraConfig:
     cpuManagerPolicy: static
   availabilityZones:
@@ -34,6 +36,8 @@ nodeGroups:
     pool: "monitoring-pool"
   ssh:
     allow: true
+  tags:
+    keep: alive
 
 cloudWatch:
   clusterLogging:
