@@ -6,6 +6,53 @@ metadata:
 
 ---
 
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: xfs-nvme-249g-iotune
+  namespace: scylla
+data:
+  io_properties.yaml: |
+    disks:
+    - mountpoint: /var/lib/scylla
+      read_iops: 385400
+      read_bandwidth: 3087631104
+      write_iops: 240628
+      write_bandwidth: 2289281280
+
+---
+
+apiVersion: scylla.scylladb.com/v1alpha1
+kind: ScyllaDBMonitoring
+metadata:
+  name: example
+spec:
+  type: Platform
+  endpointsSelector:
+    matchLabels:
+      app.kubernetes.io/name: scylla
+      scylla-operator.scylladb.com/scylla-service-type: identity
+      scylla/cluster: replace-with-your-scyllacluster-name
+  components:
+    prometheus:
+      storage:
+        volumeClaimTemplate:
+          spec:
+            resources:
+              requests:
+                storage: 1Gi
+    grafana:
+      exposeOptions:
+        webInterface:
+          ingress:
+            ingressClassName: haproxy
+            dnsDomains:
+            - test-grafana.test.svc.cluster.local
+            annotations:
+              haproxy-ingress.github.io/ssl-passthrough: "true"
+
+---
+
 # Scylla Cluster
 apiVersion: scylla.scylladb.com/v1
 kind: ScyllaCluster
@@ -16,10 +63,8 @@ spec:
   version: 5.0.5
   agentVersion: 3.0.1
   cpuset: true
-  network:
-    hostNetworking: true
   sysctls:
-  - "fs.aio-max-nr=2097152"
+  - "fs.aio-max-nr=90000000"
   datacenter:
     name: us-east-1
     racks:
@@ -46,6 +91,18 @@ spec:
             operator: Equal
             value: scylla-clusters
             effect: NoSchedule
+        agentResources:
+          limits:
+            cpu: 50m
+            memory: 50M
+        volumeMounts:
+          - mountPath: /etc/scylla.d/io_properties.yaml
+            name: iotune
+            subPath: io_properties.yaml
+        volumes:
+          - name: iotune
+            configMap:
+              name: xfs-nvme-249g-iotune
     - name: b
       members: 2
       storage:
@@ -69,7 +126,19 @@ spec:
           operator: Equal
           value: scylla-clusters
           effect: NoSchedule
-    - name: c
+        agentResources:
+          limits:
+            cpu: 50m
+            memory: 50M
+        volumeMounts:
+          - mountPath: /etc/scylla.d/io_properties.yaml
+            name: iotune
+            subPath: io_properties.yaml
+        volumes:
+          - name: iotune
+            configMap:
+              name: xfs-nvme-249g-iotune
+    - name: d
       members: 2
       storage:
         storageClassName: local-raid-disks
@@ -92,3 +161,15 @@ spec:
           operator: Equal
           value: scylla-clusters
           effect: NoSchedule
+        agentResources:
+          limits:
+            cpu: 50m
+            memory: 50M
+        volumeMounts:
+          - mountPath: /etc/scylla.d/io_properties.yaml
+            name: iotune
+            subPath: io_properties.yaml
+        volumes:
+          - name: iotune
+            configMap:
+              name: xfs-nvme-249g-iotune
