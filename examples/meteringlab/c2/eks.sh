@@ -16,20 +16,3 @@ eksctl create cluster -f ./eks-cluster.yaml
 kubectl apply -f node-setup-daemonset.yaml
 wait-for-object-creation default daemonset.apps/node-setup
 kubectl rollout status --timeout=5m daemonset.apps/node-setup
-
-# Install local volume provisioner
-echo "Installing local volume provisioner..."
-helm install local-provisioner ../../common/provisioner
-echo "Your disks are ready to use."
-
-echo "Starting the cert manger..."
-kubectl apply -f ../../common/cert-manager.yaml
-kubectl wait --for condition=established --timeout=60s crd/certificates.cert-manager.io crd/issuers.cert-manager.io
-wait-for-object-creation cert-manager deployment.apps/cert-manager-webhook
-kubectl -n cert-manager rollout status --timeout=5m deployment.apps/cert-manager-webhook
-
-echo "Starting the scylla operator..."
-kubectl apply -f ../../common/operator.yaml
-kubectl wait --for condition=established crd/scyllaclusters.scylla.scylladb.com
-wait-for-object-creation scylla-operator deployment.apps/scylla-operator
-kubectl -n scylla-operator rollout status --timeout=5m deployment.apps/scylla-operator

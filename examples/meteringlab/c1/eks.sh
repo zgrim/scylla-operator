@@ -3,7 +3,6 @@ set -euo pipefail
 
 CLUSTER_NAME=meteringlab-c1
 EKS_REGION=us-east-1
-EKS_ZONES="us-east-1a,us-east-1b,us-east-1d"
 
 function wait-for-object-creation {
     for i in {1..30}; do
@@ -23,7 +22,7 @@ echo "Installing local volume provisioner..."
 helm install local-provisioner ../../common/provisioner
 echo "Your disks are ready to use."
 
-echo "Starting the cert manger..."
+echo "Starting the cert manager..."
 kubectl apply -f ../../common/cert-manager.yaml
 kubectl wait --for condition=established --timeout=60s crd/certificates.cert-manager.io crd/issuers.cert-manager.io
 wait-for-object-creation cert-manager deployment.apps/cert-manager-webhook

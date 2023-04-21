@@ -34,3 +34,17 @@ nodeGroups:
     pool: "monitoring-pool"
   ssh:
     allow: true
+
+cloudWatch:
+  clusterLogging:
+    enableTypes: ["audit"]
+    # all supported types: "api", "audit", "authenticator", "controllerManager", "scheduler"
+    # supported special values: "*" and "all"
+    # Sets the number of days to retain the logs for
+    # By default, log data is stored in CloudWatch Logs indefinitely.
+    logRetentionInDays: 10
+
+vpcFlowLogs:
+  enable: true
+  s3Bucket: meteringLab
+  s3Prefix: FlowLogs

@@ -78,36 +78,3 @@ spec:
           value: cassandra-stress
           effect: NoSchedule
       serviceAccountName: node-setup-daemonset
-      containers:
-      - name: node-setup
-        image: scylladb/scylla-machine-image:k8s-aws-666.development-20201023.0c4dfa1
-        imagePullPolicy: Always
-        args:
-          - --all
-        env:
-          - name: ROOT_DISK
-            value: /mnt/hostfs/mnt/raid-disks/disk0
-          - name: SCYLLAD_CONF_MOUNT
-            value: /mnt/scylla.d/
-        securityContext:
-          privileged: true
-        volumeMounts:
-          - name: hostfs
-            mountPath: /mnt/hostfs
-            mountPropagation: Bidirectional
-          - name: hostetcscyllad
-            mountPath: /mnt/scylla.d
-            mountPropagation: Bidirectional
-          - name: hostirqbalanceconfig
-            mountPath: /etc/conf.d/irqbalance
-            mountPropagation: Bidirectional
-      volumes:
-        - name: hostfs
-          hostPath:
-            path: /
-        - name: hostetcscyllad
-          hostPath:
-            path: /etc/scylla.d/
-        - name: hostirqbalanceconfig
-          hostPath:
-            path: /etc/sysconfig/irqbalance
