@@ -98,7 +98,7 @@ spec:
     - name: a
       members: 2
       storage:
-        storageClassName: local-raid-disks
+        storageClassName: local-xfs
         capacity: 1800G
       resources:
         limits:
@@ -133,7 +133,7 @@ spec:
     - name: b
       members: 2
       storage:
-        storageClassName: local-raid-disks
+        storageClassName: local-xfs
         capacity: 1800G
       resources:
         limits:
@@ -168,7 +168,7 @@ spec:
     - name: d
       members: 2
       storage:
-        storageClassName: local-raid-disks
+        storageClassName: local-xfs
         capacity: 1800G
       resources:
         limits:
