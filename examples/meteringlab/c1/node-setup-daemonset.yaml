@@ -86,10 +86,6 @@ spec:
           operator: Equal
           value: scylla-clusters
           effect: NoSchedule
-        - key: role
-          operator: Equal
-          value: cassandra-stress
-          effect: NoSchedule
       serviceAccountName: node-setup-daemonset
       containers:
       - name: node-setup

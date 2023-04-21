@@ -72,20 +72,7 @@ spec:
       hostPID: true
       hostIPC: true
       hostNetwork: true
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                - key: pool
-                  operator: In
-                  values:
-                   - scylla-pool
       tolerations:
-        - key: role
-          operator: Equal
-          value: scylla-clusters
-          effect: NoSchedule
         - key: role
           operator: Equal
           value: cassandra-stress
