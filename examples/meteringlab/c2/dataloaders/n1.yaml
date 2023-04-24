@@ -1,0 +1,48 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: n1-dataloader
+  namespace: default
+  labels:
+    app: dataloader
+spec:
+  template:
+    metadata:
+      labels:
+        app: job
+    spec:
+      volumes:
+        - name: c1n1-connection-bundle
+          secret:
+            secretName: c1n1-connection-bundle
+      containers:
+      - name: dataloader
+        image: scylladb/scylla-bench:latest
+        volumeMounts:
+        - name: c1n1-connection-bundle
+          mountPath: /var/run/secrets/kubernetes.io/connbundle
+          readOnly: true
+        command:
+          - "/bin/bash"
+          - "-c"
+          - 'scylla-bench -tls true -workload sequential -mode write -nodes n1,n2,n3 -clustering-row-size 16 -validate-data -cloud-config-path /var/run/secrets/kubernetes.io/connbundle'
+        resources:
+          limits:
+            cpu: 7
+            memory: 12G
+      restartPolicy: Never
+      tolerations:
+        - key: role
+          operator: Equal
+          value: dataloader
+          effect: NoSchedule
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - job
+            topologyKey: "kubernetes.io/hostname"

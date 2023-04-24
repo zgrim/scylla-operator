@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: c1-connection-bundle
+  name: c1n3-connection-bundle
 type: Opaque
 data:
   namespace: scylla
