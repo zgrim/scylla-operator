@@ -25,7 +25,7 @@ spec:
         command:
           - "/bin/bash"
           - "-c"
-          - 'scylla-bench -tls true -workload sequential -mode write -nodes n1,n2,n3 -clustering-row-size 16 -validate-data -cloud-config-path /var/run/secrets/kubernetes.io/connbundle'
+          - 'scylla-bench -workload sequential -mode write -clustering-row-size 16 -validate-data -cloud-config-path /var/run/secrets/kubernetes.io/connbundle/sc1.ml.virgil.scylla-operator.scylladb.com'
         resources:
           limits:
             cpu: 7
