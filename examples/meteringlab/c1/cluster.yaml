@@ -47,7 +47,7 @@ spec:
           ingress:
             ingressClassName: haproxy
             dnsDomains:
-            - grafana.meteringlab.svc.cluster.local
+            - grafana.ml.virgil.scylla-operator.scylladb.com
             annotations:
               haproxy-ingress.github.io/ssl-passthrough: "true"
 

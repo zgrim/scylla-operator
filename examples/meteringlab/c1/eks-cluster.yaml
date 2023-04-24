@@ -31,7 +31,7 @@ nodeGroups:
   - us-east-1d
 
 - name: monitoring-pool
-  instanceType: i3.large
+  instanceType: t3a.xlarge
   desiredCapacity: 1
   labels:
     pool: "monitoring-pool"

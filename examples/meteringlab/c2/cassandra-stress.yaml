@@ -1,40 +1,40 @@
-
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: cassandra-stress-0
+  name: dataloader
   namespace: default
   labels:
-    app: cassandra-stress
+    app: dataloader
 spec:
   template:
+    metadata:
+      labels:
+        app: job
     spec:
       containers:
-      - name: cassandra-stress
-        image: scylladb/scylla:4.0.0
+      - name: dataloader
+        image: scylladb/scylla-bench:latest
         command:
           - "/bin/bash"
           - "-c"
-          - 'cassandra-stress write no-warmup n=10000000 cl=ONE -mode native cql3 connectionsPerHost=30 -col n=FIXED\(5\) size=FIXED\(64\)  -pop seq=1..10000000 -node "c1.meteringlab.virgil.scylla-operator.scylladb.com" -rate threads=1500  -log file=/cassandra-stress.load.data -schema "replication(factor=1)" -errors ignore; cat /cassandra-stress.load.data'
+          - 'scylla-bench -workload sequential -mode write -nodes n1,n2,n3 -clustering-row-size 16 -validate-data'
         resources:
           limits:
             cpu: 30
             memory: 60G
       restartPolicy: Never
-      nodeSelector:
-        
       tolerations:
         - key: role
           operator: Equal
-          value: cassandra-stress
+          value: dataloader
           effect: NoSchedule
       affinity:
         podAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 100
-              podAffinityTerm:
-                topologyKey: kubernetes.io/hostname
-                labelSelector:
-                  matchLabels:
-                    app: cassandra-stress
-       
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - job
+            topologyKey: "kubernetes.io/hostname"
