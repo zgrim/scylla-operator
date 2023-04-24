@@ -4,6 +4,7 @@ kind: ClusterConfig
 metadata:
   name: metering-lab-c1
   region: us-east-1
+  version: 1.23
 
 availabilityZones:
 - us-east-1a
