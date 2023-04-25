@@ -14,11 +14,11 @@ spec:
         app: node-pkg-installer
     spec:
       nodeSelector:
-        serverless.cloud.scylladb.com/node-type: scylla
+        pool: "scylla-pool"
       tolerations:
-      - key: serverless.cloud.scylladb.com/dedicated
+      - key: role
         operator: Equal
-        value: scylla
+        value: scylla-clusters
         effect: NoSchedule
       containers:
       - image: "docker.io/scyllazimnx/scylla-operator@sha256:a19d822ec776202eae3c4f098a058cd67b98f3fea9dc5599cde0278373fb8ddd"
