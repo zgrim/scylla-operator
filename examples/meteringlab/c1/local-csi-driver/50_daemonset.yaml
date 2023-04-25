@@ -16,6 +16,7 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/os: linux
+        pool: "scylla-pool"
       serviceAccountName: local-csi-driver
       tolerations:
       - operator: Exists

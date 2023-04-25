@@ -4,7 +4,7 @@ kind: ClusterConfig
 metadata:
   name: metering-lab-c1
   region: us-east-1
-  version: 1.23
+  version: "1.23"
 
 availabilityZones:
 - us-east-1a
@@ -47,5 +47,4 @@ cloudWatch:
     # supported special values: "*" and "all"
     # Sets the number of days to retain the logs for
     # By default, log data is stored in CloudWatch Logs indefinitely.
-    logRetentionInDays: 10
-
+    logRetentionInDays: 14
