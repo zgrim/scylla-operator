@@ -70,10 +70,10 @@ spec:
     cql:
       ingress:
         ingressClassName: haproxy
-        dnsDomains:
-        - sc4.ml.virgil.scylla-operator.scylladb.com
         annotations:
           haproxy-ingress.github.io/ssl-passthrough: "true"
+  dnsDomains:
+  - sc4.ml.virgil.scylla-operator.scylladb.com
   datacenter:
     name: us-east-1
     racks:
@@ -100,18 +100,18 @@ spec:
             operator: Equal
             value: scylla-clusters
             effect: NoSchedule
-        agentResources:
-          limits:
-            cpu: 50m
-            memory: 50M
-        volumeMounts:
-          - mountPath: /etc/scylla.d/io_properties.yaml
-            name: iotune
-            subPath: io_properties.yaml
-        volumes:
-          - name: iotune
-            configMap:
-              name: xfs-nvme-249g-iotune
+      agentResources:
+        limits:
+          cpu: 50m
+          memory: 50M
+      volumeMounts:
+        - mountPath: /etc/scylla.d/io_properties.yaml
+          name: iotune
+          subPath: io_properties.yaml
+      volumes:
+        - name: iotune
+          configMap:
+            name: xfs-nvme-249g-iotune
     - name: b
       members: 2
       storage:
@@ -135,18 +135,18 @@ spec:
           operator: Equal
           value: scylla-clusters
           effect: NoSchedule
-        agentResources:
-          limits:
-            cpu: 50m
-            memory: 50M
-        volumeMounts:
-          - mountPath: /etc/scylla.d/io_properties.yaml
-            name: iotune
-            subPath: io_properties.yaml
-        volumes:
-          - name: iotune
-            configMap:
-              name: xfs-nvme-249g-iotune
+      agentResources:
+        limits:
+          cpu: 50m
+          memory: 50M
+      volumeMounts:
+        - mountPath: /etc/scylla.d/io_properties.yaml
+          name: iotune
+          subPath: io_properties.yaml
+      volumes:
+        - name: iotune
+          configMap:
+            name: xfs-nvme-249g-iotune
     - name: d
       members: 2
       storage:
@@ -170,15 +170,15 @@ spec:
           operator: Equal
           value: scylla-clusters
           effect: NoSchedule
-        agentResources:
-          limits:
-            cpu: 50m
-            memory: 50M
-        volumeMounts:
-          - mountPath: /etc/scylla.d/io_properties.yaml
-            name: iotune
-            subPath: io_properties.yaml
-        volumes:
-          - name: iotune
-            configMap:
-              name: xfs-nvme-249g-iotune
+      agentResources:
+        limits:
+          cpu: 50m
+          memory: 50M
+      volumeMounts:
+        - mountPath: /etc/scylla.d/io_properties.yaml
+          name: iotune
+          subPath: io_properties.yaml
+      volumes:
+        - name: iotune
+          configMap:
+            name: xfs-nvme-249g-iotune
