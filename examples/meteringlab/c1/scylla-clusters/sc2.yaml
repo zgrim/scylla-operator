@@ -81,7 +81,7 @@ spec:
       members: 2
       storage:
         storageClassName: local-xfs
-        capacity: 1800G
+        capacity: 250G
       resources:
         limits:
           cpu: 3
@@ -116,7 +116,7 @@ spec:
       members: 2
       storage:
         storageClassName: local-xfs
-        capacity: 1800G
+        capacity: 250G
       resources:
         limits:
           cpu: 3
@@ -151,7 +151,7 @@ spec:
       members: 2
       storage:
         storageClassName: local-xfs
-        capacity: 1800G
+        capacity: 250G
       resources:
         limits:
           cpu: 3
