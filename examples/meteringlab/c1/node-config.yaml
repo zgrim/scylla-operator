@@ -20,14 +20,8 @@ spec:
           modelRegex: Amazon EC2 NVMe Instance Storage
           nameRegex: ^/dev/nvme\d+n\d+$
   placement:
-    nodeSelectorTerms:
-      - matchExpressions:
-        - key: topology.kubernetes.io/zone
-          operator: In
-          values:
-            - us-east-1a
-            - us-east-1b
-            - us-east-1d
+    nodeSelector:
+      pool: "scylla-pool"
     tolerations:
     - key: role
       operator: Equal
