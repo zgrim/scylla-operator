@@ -49,15 +49,3 @@ cloudWatch:
     # By default, log data is stored in CloudWatch Logs indefinitely.
     logRetentionInDays: 10
 
-vpc:
-  flowLogs:
-    enable: true
-    s3Bucket: meteringLab
-    s3Prefix: FlowLogs
-    format: "VERSION"
-    version: "2"
-
-#vpcFlowLogs:
-#  enable: true
-#  s3Bucket: meteringLab
-#  s3Prefix: FlowLogs
