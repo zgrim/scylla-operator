@@ -23,11 +23,11 @@ spec:
       serviceAccountName: scylla-operator
       containers:
       - name: scylla-operator
-        image: docker.io/scyllazimnx/scylla-operator:local-disk-setup
+        image: docker.io/scyllazimnx/scylla-operator@sha256:a19d822ec776202eae3c4f098a058cd67b98f3fea9dc5599cde0278373fb8ddd
         imagePullPolicy: IfNotPresent
         env:
         - name: SCYLLA_OPERATOR_IMAGE
-          value: docker.io/scyllazimnx/scylla-operator:local-disk-setup
+          value: docker.io/scyllazimnx/scylla-operator@sha256:a19d822ec776202eae3c4f098a058cd67b98f3fea9dc5599cde0278373fb8ddd
         args:
         - operator
         - --loglevel=2
