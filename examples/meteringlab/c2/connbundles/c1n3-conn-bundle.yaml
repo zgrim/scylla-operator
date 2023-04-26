@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: Secret
-metadata:
-  name: c1n3-connection-bundle
-type: Opaque
-data:
-  namespace: scylla
-  ca.crt: <data>
-  token: <data>

@@ -10,6 +10,10 @@ availabilityZones:
 - us-east-1a
 - us-east-1b
 
+vpc:
+  cidr: 10.13.13.0/24
+  autoAllocateIPv6: false
+
 nodeGroups:
 - name: cassandra-stress-pool
   instanceType: c4.2xlarge
