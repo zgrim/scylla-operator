@@ -30,6 +30,7 @@ spec:
         - --loglevel=2
         - --tls-cert-file=/tmp/serving-certs/tls.crt
         - --tls-private-key-file=/tmp/serving-certs/tls.key
+        - --feature-gates=AllAlpha=true,AllBeta=true
         livenessProbe:
           httpGet:
             path: /readyz
