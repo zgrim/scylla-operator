@@ -4,10 +4,11 @@ kind: ClusterConfig
 metadata:
   name: metering-lab-c2
   region: us-east-1
-  version: 1.23
+  version: "1.23"
 
 availabilityZones:
 - us-east-1a
+- us-east-1b
 
 nodeGroups:
 - name: cassandra-stress-pool

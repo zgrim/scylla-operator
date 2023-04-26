@@ -31,6 +31,8 @@ spec:
         args:
         - operator
         - --loglevel=2
+        - --cqls-ingress-port=9142
+        - --feature-gates=AllAlpha=true,AllBeta=true
         resources:
           requests:
             cpu: 10m
