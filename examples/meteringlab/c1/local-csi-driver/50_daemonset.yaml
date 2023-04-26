@@ -9,30 +9,35 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: local-csi-driver
+      app.kubernetes.io/instance: local-csi-driver
   template:
     metadata:
       labels:
         app.kubernetes.io/name: local-csi-driver
+        app.kubernetes.io/instance: local-csi-driver
     spec:
       nodeSelector:
-        kubernetes.io/os: linux
+        serverless.cloud.scylladb.com/node-type: scylladb
         pool: "scylla-pool"
       serviceAccountName: local-csi-driver
       tolerations:
-      - operator: Exists
+      - key: role
+        operator: Equal
+        value: scylla-clusters
+        effect: NoSchedule
       containers:
       - name: local-csi-driver
         securityContext:
           privileged: true
-        image: docker.io/scyllazimnx/k8s-local-volume-provisioner:latest
+        image: docker.io/scyllazimnx/k8s-local-volume-provisioner@sha256:99d759ffa20cefdcd40856747369895cfb1c92093a3311e8ad81acea285baf97
         imagePullPolicy: IfNotPresent
         args:
-        - --listen=/csi/csi.sock
-        - --node-name=$(NODE_NAME)
+        - --endpoint=unix://csi/csi.sock
+        - --node-name=$(KUBE_NODE_NAME)
         - --volumes-dir=/mnt/persistent-volumes
-        - --v=2
+        - --v=4
         env:
-        - name: NODE_NAME
+        - name: KUBE_NODE_NAME
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
@@ -57,7 +62,7 @@ spec:
           periodSeconds: 2
           failureThreshold: 5
       - name: csi-driver-registrar
-        image: registry.k8s.io/sig-storage/csi-node-driver-registrar@sha256:fdff3ee285341bc58033b6b2458a5d45fd90ec6922a8ba6ebdd49b0c41e2cd34
+        image:  k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.6.1
         imagePullPolicy: IfNotPresent
         args:
         - --csi-address=/csi/csi.sock
@@ -68,7 +73,7 @@ spec:
         - name: registration-dir
           mountPath: /registration
       - name: liveness-probe
-        image: registry.k8s.io/sig-storage/livenessprobe@sha256:cacee2b5c36dd59d4c7e8469c05c9e4ef53ecb2df9025fa8c10cdaf61bce62f0
+        image: k8s.gcr.io/sig-storage/livenessprobe:v2.8.0
         imagePullPolicy: IfNotPresent
         args:
         - --csi-address=/csi/csi.sock
@@ -78,7 +83,7 @@ spec:
         - name: plugin-dir
           mountPath: /csi
       - name: csi-provisioner
-        image: registry.k8s.io/sig-storage/csi-provisioner@sha256:ee3b525d5b89db99da3b8eb521d9cd90cb6e9ef0fbb651e98bb37be78d36b5b8
+        image: k8s.gcr.io/sig-storage/csi-provisioner:v3.3.0
         imagePullPolicy: IfNotPresent
         args:
         - --csi-address=/csi/csi.sock
