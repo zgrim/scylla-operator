@@ -17,14 +17,10 @@ spec:
         app.kubernetes.io/instance: local-csi-driver
     spec:
       nodeSelector:
-        serverless.cloud.scylladb.com/node-type: scylladb
         pool: "scylla-pool"
       serviceAccountName: local-csi-driver
       tolerations:
-      - key: role
-        operator: Equal
-        value: scylla-clusters
-        effect: NoSchedule
+      - operator: Exists
       containers:
       - name: local-csi-driver
         securityContext:
