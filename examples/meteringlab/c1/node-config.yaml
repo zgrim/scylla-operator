@@ -5,10 +5,10 @@ metadata:
 spec:
   localDiskSetup:
     filesystems:
-    - device: nvmes
-      type: xfs
+    - type: xfs
+      device: /dev/md/nvmes
     mounts:
-    - device: nvmes
+    - device: /dev/md/nvmes
       mountPoint: /mnt/persistent-volumes
       unsupportedOptions:
       - prjquota
@@ -18,7 +18,7 @@ spec:
       RAID0:
         devices:
           modelRegex: Amazon EC2 NVMe Instance Storage
-          nameRegex: ^/dev/nvme\d+n\d+$
+          nameRegex: "/dev/nvme\\d+n\\d+$"
   placement:
     nodeSelector:
       pool: "scylla-pool"

@@ -14,7 +14,7 @@ availabilityZones:
 nodeGroups:
 - name: scylla-pool
   instanceType: i4i.xlarge
-  desiredCapacity: 3
+  desiredCapacity: 1
   labels:
     pool: "scylla-pool"
   taints:

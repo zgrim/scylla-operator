@@ -12,37 +12,22 @@ spec:
         app: job
     spec:
       volumes:
-        - name: c1n2-connection-bundle
+        - name: c2n2-connection-bundle
           secret:
-            secretName: c1n2-connection-bundle
+            secretName: c2n2-connection-bundle
       containers:
       - name: dataloader
-        image: scylladb/scylla-bench:latest
+        image: scylladb/hydra-loaders:scylla-bench-v0.1.16
         volumeMounts:
-        - name: c1n2-connection-bundle
+        - name: c2n2-connection-bundle
           mountPath: /var/run/secrets/kubernetes.io/connbundle
           readOnly: true
         command:
           - "/bin/bash"
           - "-c"
-          - 'scylla-bench -workload sequential -mode write -clustering-row-size 16 -validate-data -cloud-config-path /var/run/secrets/kubernetes.io/connbundle/sc2.ml.virgil.scylla-operator.scylladb.com'
+          - 'time scylla-bench -workload=sequential -mode=write -concurrency=20 -partition-count=500 -clustering-row-count=10000000 -clustering-row-size=100 -consistency-level=all -rows-per-request=50000 -validate-data -cloud-config-path /var/run/secrets/kubernetes.io/connbundle/sc2.ml.virgil.scylla-operator.scylladb.com'
         resources:
           limits:
-            cpu: 7
-            memory: 12G
+            cpu: 4
+            memory: 4G
       restartPolicy: Never
-      tolerations:
-        - key: role
-          operator: Equal
-          value: dataloader
-          effect: NoSchedule
-      affinity:
-        podAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - job
-            topologyKey: "kubernetes.io/hostname"

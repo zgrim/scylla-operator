@@ -28,8 +28,8 @@ spec:
           - 'scylla-bench -workload sequential -mode write -clustering-row-size 16 -validate-data -cloud-config-path /var/run/secrets/kubernetes.io/connbundle/sc4.ml.virgil.scylla-operator.scylladb.com'
         resources:
           limits:
-            cpu: 7
-            memory: 12G
+            cpu: 4
+            memory: 14G
       restartPolicy: Never
       tolerations:
         - key: role
