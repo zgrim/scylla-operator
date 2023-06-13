@@ -1,0 +1,50 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: metering-lab-c1
+  region: us-east-1
+  version: "1.23"
+
+availabilityZones:
+- us-east-1a
+- us-east-1b
+- us-east-1d
+
+nodeGroups:
+- name: scylla-pool
+  instanceType: i4i.xlarge
+  desiredCapacity: 1
+  labels:
+    pool: "scylla-pool"
+  taints:
+    role: "scylla-clusters:NoSchedule"
+  ssh:
+    allow: true
+  tags:
+    keep: alive
+  kubeletExtraConfig:
+    cpuManagerPolicy: static
+  availabilityZones:
+  - us-east-1a
+  - us-east-1b
+  - us-east-1d
+
+- name: monitoring-pool
+  instanceType: t3a.xlarge
+  desiredCapacity: 1
+  labels:
+    pool: "monitoring-pool"
+  ssh:
+    allow: true
+  tags:
+    keep: alive
+
+cloudWatch:
+  clusterLogging:
+    enableTypes: ["audit"]
+    # all supported types: "api", "audit", "authenticator", "controllerManager", "scheduler"
+    # supported special values: "*" and "all"
+    # Sets the number of days to retain the logs for
+    # By default, log data is stored in CloudWatch Logs indefinitely.
+    logRetentionInDays: 14

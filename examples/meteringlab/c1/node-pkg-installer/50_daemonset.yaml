@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: node-pkg-installer
+  labels:
+    app: node-pkg-installer
+spec:
+  selector:
+    matchLabels:
+      app: node-pkg-installer
+  template:
+    metadata:
+      labels:
+        app: node-pkg-installer
+    spec:
+      nodeSelector:
+        pool: "scylla-pool"
+      tolerations:
+      - key: role
+        operator: Equal
+        value: scylla-clusters
+        effect: NoSchedule
+      containers:
+      - image: "docker.io/scyllazimnx/scylla-operator@sha256:a19d822ec776202eae3c4f098a058cd67b98f3fea9dc5599cde0278373fb8ddd"
+        imagePullPolicy: "Always"
+        name: node-pkg-installer
+        command:
+        - "/usr/sbin/chroot"
+        - "/host"
+        - "/usr/bin/bash"
+        - "-euExo"
+        - "pipefail"
+        - "-c"
+        args:
+        - |
+          yum install -y util-linux xfsprogs mdadm && \
+          sleep infinity
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath: /host
+          name: hostfs
+      volumes:
+      - name: hostfs
+        hostPath:
+          path: /
